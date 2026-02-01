@@ -1,17 +1,14 @@
 /*
- * Q1: DAXPY Operation (Double precision A*X Plus Y)
- * Course: UCS645 - Parallel and Distributed Computing
- * Author: Nimish Badgujar (102497027)
- *
- * Operation: X[i] = a * X[i] + Y[i]
- * Vector size: 2^16 = 65536 elements
+ * Author: Nimish Badgujar
+ * Roll No: 102497027
+ * Group: 3Q21
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
 
-#define N (1 << 16)  // 2^16 as per assignment
+#define N (1 << 16)
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
@@ -23,9 +20,8 @@ int main(int argc, char* argv[]) {
     
     double *X = malloc(N * sizeof(double));
     double *Y = malloc(N * sizeof(double));
-    double a = 2.5;  // Scalar value for DAXPY
+    double a = 2.5;
 
-    // Initialize vectors
     for (int i = 0; i < N; i++) {
         X[i] = 1.0;
         Y[i] = 2.0;
@@ -33,7 +29,6 @@ int main(int argc, char* argv[]) {
 
     double start = omp_get_wtime();
 
-    // DAXPY: X[i] = a * X[i] + Y[i]
     #pragma omp parallel for num_threads(threads)
     for (int i = 0; i < N; i++) {
         X[i] = a * X[i] + Y[i];

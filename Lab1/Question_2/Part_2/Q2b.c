@@ -1,17 +1,14 @@
 /*
- * Q2 Part B: Matrix Multiplication with 2D Threading (collapse)
- * Course: UCS645 - Parallel and Distributed Computing
- * Author: Nimish Badgujar (102497027)
- *
- * Parallelizes both i and j loops using collapse(2)
- * Matrix size: 1000 x 1000
+ * Author: Nimish Badgujar
+ * Roll No: 102497027
+ * Group: 3Q21
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
 
-#define N 1000  // Matrix dimension as per assignment
+#define N 1000
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
@@ -21,10 +18,8 @@ int main(int argc, char* argv[]) {
 
     int threads = atoi(argv[1]);
 
-    // Using static to allocate on BSS segment (avoids stack overflow)
     static double A[N][N], B[N][N], C[N][N];
 
-    // Initialize matrices
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {
             A[i][j] = 1.0;
@@ -35,7 +30,6 @@ int main(int argc, char* argv[]) {
 
     double start = omp_get_wtime();
 
-    // 2D parallelization: collapse both i and j loops
     #pragma omp parallel for collapse(2) num_threads(threads)
     for (int i = 0; i < N; i++) {
         for (int j = 0; j < N; j++) {

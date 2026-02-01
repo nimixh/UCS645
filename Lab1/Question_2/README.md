@@ -1,14 +1,13 @@
 # Q2: Matrix Multiplication
 
+Author: Nimish Badgujar (102497027)
+
 ## Problem Statement
 
-> Build parallel matrix multiplication for 1000×1000 matrices  
-> Implement two versions:
->
-> 1. **1D Threading**: Parallelize single (outer) loop
-> 2. **2D Threading**: Use `collapse(2)` to parallelize nested loops
-
----
+Build parallel matrix multiplication for 1000x1000 matrices  
+Implement two versions:
+1. 1D Threading: Parallelize single (outer) loop
+2. 2D Threading: Use collapse(2) to parallelize nested loops
 
 ## Implementation
 
@@ -32,81 +31,86 @@ for (int i = 0; i < N; i++)
             C[i][j] += A[i][k] * B[k][j];
 ```
 
-### Compilation
+## Compilation
 
 ```bash
 cd Part_1 && gcc -fopenmp Q2.c -o Q2 -O2
 cd Part_2 && gcc -fopenmp Q2b.c -o Q2b -O2
 ```
 
----
-
 ## Results - 1D Threading
 
-**System**: AMD Ryzen 5 4600H (6 cores / 12 threads)  
-**Matrix Size**: 1000 × 1000
+System: AMD Ryzen 5 4600H (6 cores / 12 threads)  
+Matrix Size: 1000 x 1000
 
-| Threads | Time (s) | Speedup | Efficiency |
-| :-----: | :------: | :-----: | :--------: |
-|    1    | 0.973297 |  1.00×  |   100.0%   |
-|    2    | 0.608039 |  1.60×  |   80.0%    |
-|    4    | 0.346913 |  2.81×  |   70.1%    |
-|    6    | 0.239553 |  4.06×  |   67.7%    |
-|    8    | 0.187394 |  5.19×  |   64.9%    |
-|   12    | 0.175953 |  5.53×  |   46.1%    |
+| Threads | Time (s) | Speedup | Efficiency | Notes |
+|:-------:|:--------:|:-------:|:----------:|:-----:|
+| 1 | 1.049611 | 1.00x | 100.0% | Baseline |
+| 2 | 0.671124 | 1.56x | 78.2% | |
+| 4 | 0.345118 | 3.04x | 76.0% | |
+| 6 | 0.235986 | 4.45x | 74.1% | |
+| 8 | 0.173409 | 6.05x | 75.7% | |
+| 12 | 0.159662 | 6.57x | 54.8% | Hardware limit |
+| 16 | 0.180315 | 5.82x | 36.4% | Oversubscribed |
+| 24 | 0.192184 | 5.46x | 22.8% | Oversubscribed |
 
 ![1D Speedup](q2_1d_speedup.png)
 
----
-
 ## Results - 2D Threading (collapse)
 
-| Threads | Time (s) | Speedup | Efficiency |
-| :-----: | :------: | :-----: | :--------: |
-|    1    | 1.335878 |  1.00×  |   100.0%   |
-|    2    | 0.806792 |  1.66×  |   82.8%    |
-|    4    | 0.425374 |  3.14×  |   78.5%    |
-|    6    | 0.292468 |  4.57×  |   76.1%    |
-|    8    | 0.225359 |  5.93×  |   74.1%    |
-|   12    | 0.204070 |  6.55×  |   54.6%    |
+| Threads | Time (s) | Speedup | Efficiency | Notes |
+|:-------:|:--------:|:-------:|:----------:|:-----:|
+| 1 | 1.351594 | 1.00x | 100.0% | Baseline |
+| 2 | 0.810649 | 1.67x | 83.4% | |
+| 4 | 0.405591 | 3.33x | 83.3% | |
+| 6 | 0.288510 | 4.68x | 78.1% | |
+| 8 | 0.209516 | 6.45x | 80.6% | |
+| 12 | 0.250924 | 5.39x | 44.9% | Hardware limit |
+| 16 | 0.214779 | 6.29x | 39.3% | Oversubscribed |
+| 24 | 0.228982 | 5.90x | 24.6% | Oversubscribed |
 
 ![2D Speedup](q2_2d_speedup.png)
-
----
 
 ## Analysis
 
 ### Work Partitioning Strategy
 
-**1D (Row Distribution)**:
-
+1D (Row Distribution):
 - Each thread processes N/threads complete rows
 - Good cache locality for row access
 - Simple scheduling with low overhead
 
-**2D (Collapsed Distribution)**:
-
-- Iteration space = N×N = 1,000,000 iterations
+2D (Collapsed Distribution):
+- Iteration space = N x N = 1,000,000 iterations
 - More balanced work distribution
 - Better scalability at higher thread counts
 
 ### Comparison
 
-| Metric              | 1D    | 2D    |
-| ------------------- | ----- | ----- |
-| Best 1-thread time  | 0.97s | 1.34s |
-| Best 12-thread time | 0.18s | 0.20s |
-| Max speedup         | 5.53× | 6.55× |
+| Metric | 1D | 2D |
+|--------|----|----|
+| Best 1-thread time | 1.05s | 1.35s |
+| Best thread count | 12 | 8 |
+| Best time | 0.16s @ 12T | 0.21s @ 8T |
+| Max speedup | 6.57x @ 12T | 6.45x @ 8T |
 
 ### Key Findings
 
-1. **1D has lower overhead** - Faster single-threaded performance
-2. **2D scales better** - Higher speedup at maximum threads
-3. **Both plateau at 6 cores** - Beyond physical cores, SMT adds limited benefit
-4. **Memory bandwidth limits scaling** - Matrix B access pattern causes cache misses
+1. 1D has lower overhead - Faster single-threaded performance
+2. Both show good scaling up to 8 threads
+3. Performance plateaus at 12 threads (hardware limit)
+4. Oversubscription effects visible at 16/24 threads
 
-### Why Performance Degrades Beyond 6 Threads?
+### What Happens When Threads Increase Beyond Optimal Point?
 
-- Physical cores saturated
-- SMT shares execution units
-- Memory bandwidth becomes bottleneck
+Optimal: 8-12 threads depending on implementation
+
+Beyond 12 threads (Oversubscription):
+1. Context Switching: CPU must time-slice threads onto physical cores
+2. Cache Thrashing: Threads constantly evict each other's cache data
+3. Scheduler Overhead: OS spends cycles managing threads instead of doing work
+4. Memory Bandwidth Saturation: Already maxed out, no improvement possible
+
+Observable Effects:
+- 16 threads: Performance degrades by 10-13%
+- 24 threads: Performance degrades by 15-17%

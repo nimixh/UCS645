@@ -1,33 +1,16 @@
-# UCS645 - Parallel & Distributed Computing
+# UCS645 Parallel and Distributed Computing
 
-> **A comprehensive exploration of parallel programming concepts using OpenMP**
-
----
+Author: Nimish Badgujar  
+Roll Number: 102497027  
+Group: 3Q21
 
 ## Repository Overview
 
-This repository showcases my work for the **UCS645: Parallel and Distributed Computing** course. Each lab is structured with detailed documentation, performance benchmarks, and analysis of parallel algorithms.
-
-### What's Inside
-
-- **DAXPY Operations** - Vector computations with thread-level parallelism
-- **Matrix Multiplication** - Comparing 1D vs 2D work distribution strategies
-- **Pi Approximation** - Numerical integration using parallel reduction
-
----
-
-## Author Information
-
-| Field           | Details         |
-| --------------- | --------------- |
-| **Name**        | Nimish Badgujar |
-| **Roll Number** | 102497027       |
-| **Group**       | 3Q21            |
-
----
+This repository contains all lab assignments for UCS645: Parallel and Distributed Computing course. Each lab includes implementation, performance analysis, and documentation of parallel algorithms using OpenMP.
 
 ## Environment
 
-- **OS**: Arch Linux (Native)
-- **Compiler**: GCC 15.2.1
-- **Parallelization**: OpenMP
+- OS: Arch Linux
+- Compiler: GCC 15.2.1
+- Parallelization: OpenMP
+- CPU: AMD Ryzen 5 4600H (6 cores / 12 threads)

@@ -1,17 +1,14 @@
 /*
- * Q3: Pi Approximation using Numerical Integration
- * Course: UCS645 - Parallel and Distributed Computing
- * Author: Nimish Badgujar (102497027)
- *
- * Approximates pi using: π = ∫(0 to 1) 4/(1+x²) dx
- * Uses midpoint rule for numerical integration
+ * Author: Nimish Badgujar
+ * Roll No: 102497027
+ * Group: 3Q21
  */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
 
-static long num_steps = 100000;  // As per assignment specification
+static long num_steps = 100000;
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
