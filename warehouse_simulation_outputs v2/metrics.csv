@@ -1,0 +1,6 @@
+metric,value
+training_time_ms,4.602
+simulation_steps,500
+total_deliveries,3
+avg_steps_per_delivery,579.0
+total_collision_blocks,11804

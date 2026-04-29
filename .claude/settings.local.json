@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 create_colab_notebook.py)",
+      "Bash(python3 test_pathfinding.py)",
+      "Bash(g++ -fopenmp -O3 -o cpu_baseline cpu_baseline.cpp -lm)",
+      "Bash(./cpu_baseline)",
+      "Bash(python3 -c ' *)",
+      "Bash(node create_presentation.js)",
+      "Bash(npm root *)",
+      "Bash(npm init *)",
+      "Bash(npm install *)",
+      "Bash(tectonic main.tex)",
+      "Bash(pip install *)",
+      "Bash(python -m markitdown UCS645_Presentation.pptx)",
+      "Bash(python /home/nimish/.claude/plugins/cache/anthropic-agent-skills/document-skills/5128e1865d67/skills/pptx/scripts/office/soffice.py --headless --convert-to pdf UCS645_Presentation.pptx)",
+      "Bash(python3 *)"
+    ]
+  }
+}

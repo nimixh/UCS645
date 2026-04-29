@@ -1,0 +1,8 @@
+metric,value
+mode,Serial (1 thread)
+num_threads,1
+training_time_ms,178.9
+simulation_time_ms,6.7
+total_time_ms,185.6
+deliveries,11
+simulation_steps,500

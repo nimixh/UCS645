@@ -1,0 +1,6 @@
+metric,value
+mode,CPU Serial (1 thread)
+num_threads,1
+total_time_ms,16.1
+deliveries,30
+simulation_steps,44
